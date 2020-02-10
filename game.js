@@ -26,9 +26,12 @@ var chiortiki = [{x: 12, y: 12}];
 function keyUpHandler() {
 	if (event.keyCode===37||event.keyCode===38||event.keyCode===39||event.keyCode===40){
 		keyp=0;
-		if (timerId !== undefined) {
-			clearTimeout(timerId); timerId = undefined;
-		};
+		for (var i = 0; i < 4; i ++) {
+			if (timerId[i] !== undefined) {
+				clearTimeout(timerId[i]); timerId[i] = undefined;
+			};
+		}
+		
 	};
 };
 
@@ -37,13 +40,13 @@ function keyDownHandler() {
 	console.log("handler");
 	keyp=1; 
 	if (event.keyCode===37) 
-	{	move('left') };
+	{	move(3) };
 	if (event.keyCode===39) 
-	{move('right')}; 
+	{move(1)}; 
 	if (event.keyCode===38) 
-	{move('straight')}; 
+	{move(0)}; 
 	if (event.keyCode===40) 
-	{move('back')};
+	{move(2)};
 	if (event.keyCode===32) {
 	sword = true;
 	drawAll();
@@ -343,11 +346,11 @@ function drawAll(inf){
 	}
 }
 
-var timerId = undefined;
+var timerId = [undefined, undefined, undefined, undefined];
 
 function move(turn){
 	if (keyp===1){
-		if (turn==="straight") {
+		if (turn==0) {
 			if (character.y===0||map[character.y-1][character.x]===1){
 				if (map[character.y-1][character.x]===1){
 					contact();
@@ -355,7 +358,7 @@ function move(turn){
 				return;
 			};
 			character.y--;
-		} else if (turn==="back") {
+		} else if (turn==2) {
 			if (character.y===19||map[character.y+1][character.x]===1){
 				if (map[character.y+1][character.x]===1){
 					contact();
@@ -363,7 +366,7 @@ function move(turn){
 				return;
 			};
 			character.y++;
-		} else if (turn==="right") {
+		} else if (turn==1) {
 			t = 1;
 			if (character.x===19||map[character.y][character.x+1]===1){
 				if (map[character.y][character.x+1]===1){
@@ -372,7 +375,7 @@ function move(turn){
 				return;
 			};
 			character.x++;
-		} else if (turn==="left") {
+		} else if (turn===3) {
 			t = 0;
 			if (character.x===0||map[character.y][character.x-1]===1){
 				if (map[character.y][character.x-1]===1){
@@ -383,7 +386,7 @@ function move(turn){
 			character.x--;
 		};
 		drawAll();
-		timerId = setTimeout(move,200,turn);
+		timerId[turn] = setTimeout(move,200,turn);
 	}
 	
 };
